@@ -25,7 +25,7 @@ public class BookService {
      return repository.findById(id);
     }
 
-    public void delete(Long id){
+    public void deleteBook(Long id){
         //criando uma variavel que é o retorno do Livro por id
         var optionalBook = getBookById(id);
 
