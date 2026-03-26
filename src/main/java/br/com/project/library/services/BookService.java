@@ -13,16 +13,16 @@ import java.util.Optional;
 @Service // tornando o BookService um componente para ser injetado
 public class BookService {
     @Autowired
-    private BookRepository repository;
+    private BookRepository bookRepository;
 
-    public List<Book> getBook(){return repository.findAll();}
+    public List<Book> getBook(){return bookRepository.findAll();}
 
     public Book addBook(Book book){
-        return repository.save(book);
+        return bookRepository.save(book);
     }
 
     public Optional<Book> getBookById(Long id){
-     return repository.findById(id);
+     return bookRepository.findById(id);
     }
 
     public void deleteBook(Long id){
@@ -34,7 +34,7 @@ public class BookService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "livro não encontrado");
         }
 
-        repository.deleteById(id);
+        bookRepository.deleteById(id);
     }
 
     public Book upadateBook(Long id, Book newBook ){
@@ -45,6 +45,6 @@ public class BookService {
         var book = optionalBook.get();
         newBook.setId(id);
 
-        return repository.save(newBook);
+        return bookRepository.save(newBook);
     }
 }
