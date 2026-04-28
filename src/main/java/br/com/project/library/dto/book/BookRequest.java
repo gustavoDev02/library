@@ -24,7 +24,7 @@ public record BookRequest (
         @PastOrPresent(message = "the release date must not be in future")
         LocalDate releaseDate,
 
-        @NotBlank(message = "O tipo do livro é obrigatório")
+
         BookTypes bookType
 )
 {

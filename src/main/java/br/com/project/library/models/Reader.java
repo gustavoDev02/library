@@ -1,11 +1,13 @@
 package br.com.project.library.models;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Builder
 @Data
 @Entity
 @Table(name = "TB_READER")
@@ -15,10 +17,10 @@ public class Reader {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private String cpf;
     private String email;
     private String password;
     private String phone;
-    private String address;
 
     @ManyToMany
     @JoinTable(

@@ -1,11 +1,8 @@
 package br.com.project.library.services;
 
-import br.com.project.library.dto.book.BookRequest;
-import br.com.project.library.dto.book.BookResponse;
 import br.com.project.library.enums.BookTypes;
 import br.com.project.library.models.Book;
 import br.com.project.library.repositories.BookRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -13,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 @Service // tornando o BookService um componente para ser injetado
@@ -74,6 +70,6 @@ public class BookService {
         return  bookRepository.findByGenreContainingIgnoreCase(genre, pageable);
     }
     public Page<Book> getByType(BookTypes type, Pageable pageable){
-        return  bookRepository.findByType(type, pageable);
+        return  bookRepository.findByBookType(type, pageable);
     }
 }

@@ -11,7 +11,7 @@ import java.time.LocalDate;
 public interface BookRepository extends JpaRepository<Book, Long>{
     Page<Book> findByTitleContainingIgnoreCase(String title, Pageable pageable);
     Page<Book> findByAuthorContainingIgnoreCase(String author, Pageable pageable);
-    Page<Book> findByType(BookTypes type, Pageable pageable);
+    Page<Book> findByBookType(BookTypes type, Pageable pageable);
     Page<Book> findByReleaseDateBetween(LocalDate start, LocalDate end, Pageable pageable);
     Page<Book> findByPublisherContainingIgnoreCase(String publisher, Pageable pageable);
     Page<Book> findByGenreContainingIgnoreCase(String genre, Pageable pageable);
