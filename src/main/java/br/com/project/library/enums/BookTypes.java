@@ -5,4 +5,3 @@ public enum BookTypes {
     PAPERBACK,
     DIGITAL,
 }
-//teste commit

@@ -1,38 +1,79 @@
 package br.com.project.library.controllers;
-import java.util.ArrayList;
+
+import br.com.project.library.dto.book.BookRequest;
+import br.com.project.library.dto.book.BookResponse;
+import br.com.project.library.enums.BookTypes;
 import br.com.project.library.models.Book;
+import br.com.project.library.repositories.BookRepository;
 import br.com.project.library.services.BookService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/books")
 public class BookController {
-    @Autowired
-    private BookService bookService;
+
+    private final BookService bookService;
+    private final BookRepository bookRepository;
+
+    public BookController(BookService bookService, BookRepository bookRepository) {
+        this.bookService = bookService;
+        this.bookRepository = bookRepository;
+    }
 
     @GetMapping
-    public List<Book> getBooks(){
-        return bookService.getBook();
+    public Page<BookResponse> getBooks(@PageableDefault Pageable pageable){
+        return bookService.getBooks(pageable).map(BookResponse::from);
+    }
+
+    @GetMapping(params = "title")
+    public Page<BookResponse> findByTitle(@RequestParam String title, Pageable pageable){
+        return bookRepository.findByTitleContainingIgnoreCase(title, pageable).map(BookResponse::from);
+    }
+
+    @GetMapping(params = "author")
+    public Page<BookResponse> findByAuthor(@RequestParam String author, Pageable pageable){
+        return bookService.getBooksByAuthor(author, pageable).map(BookResponse::from);
+    }
+
+    @GetMapping(params = "genre")
+    public Page<BookResponse> findByGenre(@RequestParam String genre, Pageable pageable){
+        return bookService.getBooksByGenre(genre, pageable).map(BookResponse::from);
+    }
+
+    @GetMapping(params = "publisher")
+    public Page<BookResponse> findByPublisher(@RequestParam String publisher, Pageable pageable){
+        return bookService.getBooksByPublisher(publisher, pageable).map(BookResponse::from);
+    }
+
+    @GetMapping(params = "type")
+    public Page<BookResponse> findByType(@RequestParam BookTypes type, Pageable pageable){
+        return bookService.getByType(type, pageable).map(BookResponse::from);
+    }
+
+    @GetMapping(params = {"start", "end"})
+    public Page<BookResponse> findByDateRange(@RequestParam LocalDate start, @RequestParam LocalDate end, Pageable pageable){
+        return bookService.getBooksByDate(start, end, pageable).map(BookResponse::from);
     }
 
     @PostMapping
-    public ResponseEntity<Book> addBook(@RequestBody Book book){
-        var books = bookService.addBook(book);
-
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(books);
+    public ResponseEntity<BookResponse> addBook(@RequestBody @Valid BookRequest bookRequest){
+        Book book = bookRequest.toEntity();
+        Book savedBook = bookRepository.save(book);
+        return ResponseEntity.status(HttpStatus.CREATED).body(BookResponse.from(savedBook));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Book> getBookById(@PathVariable Long id){
+    public ResponseEntity<BookResponse> getBookById(@PathVariable Long id){
         return bookService.getBookById(id)
-                .map((b) -> ResponseEntity.ok(b))
+                .map((b) -> ResponseEntity.ok(BookResponse.from(b)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
@@ -43,8 +84,8 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody Book newBook){
-        Book book = bookService.upadateBook(id, newBook);
-        return ResponseEntity.ok(book);
+    public ResponseEntity<BookResponse> updateBook(@PathVariable Long id, @RequestBody @Valid BookRequest newBookRequest){
+        Book book = bookService.upadateBook(id, newBookRequest.toEntity());
+        return ResponseEntity.ok(BookResponse.from(book));
     }
 }
