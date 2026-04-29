@@ -1,0 +1,27 @@
+{"/books"}
+{
+	"title": "Verity",
+	"author": "Collen Hoover",
+	"genre" : "Romance", 
+	"publisher": "top-seller", 
+	"releaseDate": "2019-03-02",  
+	"bookType" : "PAPERBACK"
+}
+
+{"/readers"}
+{
+	"name": "Joao",
+	"cpf": "438.517.528-48",
+	"email" : "joao@email.com", 
+	"password": "senhaTop123", 
+	"phone": "11988889999"
+}
+
+{"/reviews"}
+{
+  "description": "Joao",
+	"rating": "438.517.528-48",
+	"dateOfReview" : "joao@email.com"
+  "reader": {"id": 1},
+  "book": {"id": 1}
+}
