@@ -14,7 +14,7 @@ public record BookResponse(
         LocalDate releaseDate,
         BookTypes bookType
 ) {
-    public static BookResponse from(Book b) {
+    public static BookResponse fromEntity(Book b) {
         return new BookResponse(
                 b.getId(),
                 b.getTitle(),

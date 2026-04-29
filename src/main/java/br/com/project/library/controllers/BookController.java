@@ -30,50 +30,50 @@ public class BookController {
 
     @GetMapping
     public Page<BookResponse> getBooks(@PageableDefault Pageable pageable){
-        return bookService.getBooks(pageable).map(BookResponse::from);
+        return bookService.getBooks(pageable).map(BookResponse::fromEntity);
     }
 
     @GetMapping(params = "title")
     public Page<BookResponse> findByTitle(@RequestParam String title, Pageable pageable){
-        return bookRepository.findByTitleContainingIgnoreCase(title, pageable).map(BookResponse::from);
+        return bookRepository.findByTitleContainingIgnoreCase(title, pageable).map(BookResponse::fromEntity);
     }
 
     @GetMapping(params = "author")
     public Page<BookResponse> findByAuthor(@RequestParam String author, Pageable pageable){
-        return bookService.getBooksByAuthor(author, pageable).map(BookResponse::from);
+        return bookService.getBooksByAuthor(author, pageable).map(BookResponse::fromEntity);
     }
 
     @GetMapping(params = "genre")
     public Page<BookResponse> findByGenre(@RequestParam String genre, Pageable pageable){
-        return bookService.getBooksByGenre(genre, pageable).map(BookResponse::from);
+        return bookService.getBooksByGenre(genre, pageable).map(BookResponse::fromEntity);
     }
 
     @GetMapping(params = "publisher")
     public Page<BookResponse> findByPublisher(@RequestParam String publisher, Pageable pageable){
-        return bookService.getBooksByPublisher(publisher, pageable).map(BookResponse::from);
+        return bookService.getBooksByPublisher(publisher, pageable).map(BookResponse::fromEntity);
     }
 
     @GetMapping(params = "type")
     public Page<BookResponse> findByType(@RequestParam BookTypes type, Pageable pageable){
-        return bookService.getByType(type, pageable).map(BookResponse::from);
+        return bookService.getByType(type, pageable).map(BookResponse::fromEntity);
     }
 
     @GetMapping(params = {"start", "end"})
     public Page<BookResponse> findByDateRange(@RequestParam LocalDate start, @RequestParam LocalDate end, Pageable pageable){
-        return bookService.getBooksByDate(start, end, pageable).map(BookResponse::from);
+        return bookService.getBooksByDate(start, end, pageable).map(BookResponse::fromEntity);
     }
 
     @PostMapping
     public ResponseEntity<BookResponse> addBook(@RequestBody @Valid BookRequest bookRequest){
         Book book = bookRequest.toEntity();
         Book savedBook = bookRepository.save(book);
-        return ResponseEntity.status(HttpStatus.CREATED).body(BookResponse.from(savedBook));
+        return ResponseEntity.status(HttpStatus.CREATED).body(BookResponse.fromEntity(savedBook));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<BookResponse> getBookById(@PathVariable Long id){
         return bookService.getBookById(id)
-                .map((b) -> ResponseEntity.ok(BookResponse.from(b)))
+                .map((b) -> ResponseEntity.ok(BookResponse.fromEntity(b)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
@@ -86,6 +86,6 @@ public class BookController {
     @PutMapping("/{id}")
     public ResponseEntity<BookResponse> updateBook(@PathVariable Long id, @RequestBody @Valid BookRequest newBookRequest){
         Book book = bookService.upadateBook(id, newBookRequest.toEntity());
-        return ResponseEntity.ok(BookResponse.from(book));
+        return ResponseEntity.ok(BookResponse.fromEntity(book));
     }
 }
